@@ -127,6 +127,20 @@ RCT_EXPORT_MODULE(InCallManager)
              @"WiredHeadset"];
 }
 
+- (void)setInputGain:(CGFloat)gain {
+   AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+   if (audioSession.isInputGainSettable) {
+     NSError *error = nil;
+     BOOL success = [audioSession setInputGain:gain error:&error];
+     if (!success) {
+       NSLog(@"%@", error);
+     }
+   }
+   else {
+     NSLog(@"Cannot set input gain");
+   }
+}
+
 RCT_EXPORT_METHOD(start:(NSString *)mediaType
                    auto:(BOOL)_auto
         ringbackUriType:(NSString *)ringbackUriType)
@@ -293,7 +307,13 @@ RCT_EXPORT_METHOD(setForceSpeakerphoneOn:(int)flag)
 
 RCT_EXPORT_METHOD(setMicrophoneMute:(BOOL)enable)
 {
-    NSLog(@"RNInCallManager.setMicrophoneMute(): ios doesn't support setMicrophoneMute()");
+    if (enable) {
+        NSLog(@"ahihia: @", enable)
+        [self setInputGain:0.0];
+    } else {
+        [self setInputGain:1.0];
+    }
+    // NSLog(@"RNInCallManager.setMicrophoneMute(): ios doesn't support setMicrophoneMute()");
 }
 
 RCT_EXPORT_METHOD(startRingback:(NSString *)_ringbackUriType)
