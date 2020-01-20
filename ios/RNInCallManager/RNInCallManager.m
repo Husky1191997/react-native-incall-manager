@@ -127,18 +127,24 @@ RCT_EXPORT_MODULE(InCallManager)
              @"WiredHeadset"];
 }
 
-- (void)setInputGain:(CGFloat)gain {
-   AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-   if (audioSession.isInputGainSettable) {
-     NSError *error = nil;
-     BOOL success = [audioSession setInputGain:gain error:&error];
-     if (!success) {
-       NSLog(@"%@", error);
-     }
-   }
-   else {
-     NSLog(@"Cannot set input gain");
-   }
+// - (void)setInputGain:(CGFloat)gain {
+//    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+//    if (audioSession.isInputGainSettable) {
+//      NSError *error = nil;
+//      BOOL success = [audioSession setInputGain:gain error:&error];
+//      if (!success) {
+//        NSLog(@"%@", error);
+//      }
+//    }
+//    else {
+//      NSLog(@"Cannot set input gain");
+//    }
+// }
+
+- (void)setMuted:(BOOL)muted {
+    [self willChangeValueForKey:@"muted"];
+    [self.audioCaptureSource setMuted:muted];
+    [self didChangeValueForKey:@"muted"];
 }
 
 RCT_EXPORT_METHOD(start:(NSString *)mediaType
@@ -307,12 +313,10 @@ RCT_EXPORT_METHOD(setForceSpeakerphoneOn:(int)flag)
 
 RCT_EXPORT_METHOD(setMicrophoneMute:(BOOL)enable)
 {
-    if (enable) {
-        NSLog(@"ahihia: @", enable)
-        [self setInputGain:0.0];
-    } else {
-        [self setInputGain:1.0];
-    }
+
+- (BOOL)muted {
+    return self.audioCaptureSource.muted;
+}
     // NSLog(@"RNInCallManager.setMicrophoneMute(): ios doesn't support setMicrophoneMute()");
 }
 
