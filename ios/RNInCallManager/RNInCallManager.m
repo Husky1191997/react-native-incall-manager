@@ -141,11 +141,11 @@ RCT_EXPORT_MODULE(InCallManager)
 //    }
 // }
 
-- (void)setMuted:(BOOL)muted {
-    [self willChangeValueForKey:@"muted"];
-    [self.audioCaptureSource setMuted:muted];
-    [self didChangeValueForKey:@"muted"];
-}
+// - (void)setMuted:(BOOL)muted {
+//     [self willChangeValueForKey:@"muted"];
+//     [self.audioCaptureSource setMuted:muted];
+//     [self didChangeValueForKey:@"muted"];
+// }
 
 RCT_EXPORT_METHOD(start:(NSString *)mediaType
                    auto:(BOOL)_auto
@@ -313,10 +313,23 @@ RCT_EXPORT_METHOD(setForceSpeakerphoneOn:(int)flag)
 
 RCT_EXPORT_METHOD(setMicrophoneMute:(BOOL)enable)
 {
+     self.audioDevice.block = ^() {
+            kDefaultAVAudioSessionConfigurationBlock();
 
-- (BOOL)muted {
-    return self.audioCaptureSource.muted;
-}
+            AVAudioSession *session = [AVAudioSession sharedInstance];
+
+            NSError *error = nil;
+            if (![session setCategory:AVAudioSessionCategoryRecord
+                          withOptions:AVAudioSessionCategoryOptionAllowBluetooth
+                                error:&error]) {
+                NSLog(@"AVAudioSession setCategory:withOptions %@",error);
+            }
+        };
+        self.audioDevice.block();
+
+// - (BOOL)muted {
+//     return self.audioCaptureSource.muted;
+// }
     // NSLog(@"RNInCallManager.setMicrophoneMute(): ios doesn't support setMicrophoneMute()");
 }
 
