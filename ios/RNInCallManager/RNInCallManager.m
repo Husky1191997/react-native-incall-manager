@@ -127,19 +127,21 @@ RCT_EXPORT_MODULE(InCallManager)
              @"WiredHeadset"];
 }
 
-// - (void)setInputGain:(CGFloat)gain {
-//    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-//    if (audioSession.isInputGainSettable) {
-//      NSError *error = nil;
-//      BOOL success = [audioSession setInputGain:gain error:&error];
-//      if (!success) {
-//        NSLog(@"%@", error);
-//      }
-//    }
-//    else {
-//      NSLog(@"Cannot set input gain");
-//    }
-// }
+
+- (void)setInputGain:(CGFloat)gain
+    {
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    if (audioSession.isInputGainSettable) {
+        NSError *error = nil;
+        BOOL success = [audioSession setInputGain:gain error:&error];
+        if (!success) {
+        NSLog(@"%@", error);
+        }
+    }
+    else {
+        NSLog(@"Cannot set input gain");
+    }
+    }
 
 // - (void)setMuted:(BOOL)muted {
 //     [self willChangeValueForKey:@"muted"];
@@ -313,24 +315,24 @@ RCT_EXPORT_METHOD(setForceSpeakerphoneOn:(int)flag)
 
 RCT_EXPORT_METHOD(setMicrophoneMute:(BOOL)enable)
 {
-     self.audioDevice.block = ^() {
-            kDefaultAVAudioSessionConfigurationBlock();
+    //  self.audioDevice.block = ^() {
+    //         kDefaultAVAudioSessionConfigurationBlock();
 
-            AVAudioSession *session = [AVAudioSession sharedInstance];
+    //         AVAudioSession *session = [AVAudioSession sharedInstance];
 
-            NSError *error = nil;
-            if (![session setCategory:AVAudioSessionCategoryRecord
-                          withOptions:AVAudioSessionCategoryOptionAllowBluetooth
-                                error:&error]) {
-                NSLog(@"AVAudioSession setCategory:withOptions %@",error);
-            }
-        };
-        self.audioDevice.block();
-
-// - (BOOL)muted {
-//     return self.audioCaptureSource.muted;
-// }
-    // NSLog(@"RNInCallManager.setMicrophoneMute(): ios doesn't support setMicrophoneMute()");
+    //         NSError *error = nil;
+    //         if (![session setCategory:AVAudioSessionCategoryRecord
+    //                       withOptions:AVAudioSessionCategoryOptionAllowBluetooth
+    //                             error:&error]) {
+    //             NSLog(@"AVAudioSession setCategory:withOptions %@",error);
+    //         }
+    //     };
+    //     self.audioDevice.block();
+    if (enable) {
+        [self setInputGain:0.0];
+    } else {
+        [self setInputGain:1.0];
+    }
 }
 
 RCT_EXPORT_METHOD(startRingback:(NSString *)_ringbackUriType)
