@@ -130,28 +130,28 @@ RCT_EXPORT_MODULE(InCallManager)
 
 - (void)setInputGain:(CGFloat)gain
     {
-    // AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-    // if (audioSession.isInputGainSettable) {
-    //     NSError *error = nil;
-    //     BOOL success = [audioSession setInputGain:gain error:&error];
-    //     if (!success) {
-    //     NSLog(@"%@", error);
-    //     }
-    // }
-    // else {
-    //     NSLog(@"Cannot set input gain");
-    // }
-    AVAudioSession *audioSession = AVAudioSession.sharedInstance;
-
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     if (audioSession.isInputGainSettable) {
-        [audioSession setInputGain:0.5 error:&gainError];
-    } else {
-        NSLog(@"Device is not input gain settable!");
+        NSError *error = nil;
+        BOOL success = [audioSession setInputGain:gain error:&error];
+        if (!success) {
+        NSLog(@"%@", error);
+        }
     }
+    else {
+        NSLog(@"Cannot set input gain");
+    }
+    // AVAudioSession *audioSession = AVAudioSession.sharedInstance;
 
-    if (gainError) {
-        NSLog(@"Error Gain: %@", gainError);
-    }
+    // if (audioSession.isInputGainSettable) {
+    //     [audioSession setInputGain:0.5 error:&error];
+    // } else {
+    //     NSLog(@"Device is not input gain settable!");
+    // }
+
+    // if (gainError) {
+    //     NSLog(@"Error Gain: %@", error:gainError);
+    // }
     }
 
 RCT_EXPORT_METHOD(start:(NSString *)mediaType
@@ -320,6 +320,7 @@ RCT_EXPORT_METHOD(setForceSpeakerphoneOn:(int)flag)
 
 RCT_EXPORT_METHOD(setMicrophoneMute:(BOOL)enable)
 {
+    NSLog(@"setInputGain override is successful ");
     if (enable = true) {
         [self setInputGain:0.1];
     } else {
