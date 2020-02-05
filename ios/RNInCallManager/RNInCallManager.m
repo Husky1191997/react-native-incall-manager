@@ -130,29 +130,29 @@ RCT_EXPORT_MODULE(InCallManager)
 
 - (void)setInputGain:(CGFloat)gain
     {
-    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-    if (audioSession.isInputGainSettable) {
-        NSError *error = nil;
-        BOOL success = [audioSession setInputGain:gain error:&error];
-        if (!success) {
-        NSLog(@"%@", error);
-        }
-    }
-    else {
-        NSLog(@"Cannot set input gain");
-    }
-    }
-    // CGFloat gain = sender.value;
-    //     NSError* error;
-    //     self.audioSession = [AVAudioSession sharedInstance];
-    //     if (self.audioSession.isInputGainSettable) {
-    //         BOOL success = [self.audioSession setInputGain:gain error:&error];
-    //            if (!success){
-    //                NSLog(@"%@", error);
-    //            } //error handling
-    //     } else {
-    //         NSLog(@"ios6 - cannot set input gain");
+    // AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    // if (audioSession.isInputGainSettable) {
+    //     NSError *error = nil;
+    //     BOOL success = [audioSession setInputGain:gain error:&error];
+    //     if (!success) {
+    //     NSLog(@"%@", error);
     //     }
+    // }
+    // else {
+    //     NSLog(@"Cannot set input gain");
+    // }
+    AVAudioSession *audioSession = AVAudioSession.sharedInstance;
+
+    if (audioSession.isInputGainSettable) {
+        [audioSession setInputGain:0.5 error:&gainError];
+    } else {
+        NSLog(@"Device is not input gain settable!");
+    }
+
+    if (gainError) {
+        NSLog(@"Error Gain: %@", gainError);
+    }
+    }
 
 RCT_EXPORT_METHOD(start:(NSString *)mediaType
                    auto:(BOOL)_auto
