@@ -142,12 +142,17 @@ RCT_EXPORT_MODULE(InCallManager)
         NSLog(@"Cannot set input gain");
     }
     }
-
-// - (void)setMuted:(BOOL)muted {
-//     [self willChangeValueForKey:@"muted"];
-//     [self.audioCaptureSource setMuted:muted];
-//     [self didChangeValueForKey:@"muted"];
-// }
+    // CGFloat gain = sender.value;
+    //     NSError* error;
+    //     self.audioSession = [AVAudioSession sharedInstance];
+    //     if (self.audioSession.isInputGainSettable) {
+    //         BOOL success = [self.audioSession setInputGain:gain error:&error];
+    //            if (!success){
+    //                NSLog(@"%@", error);
+    //            } //error handling
+    //     } else {
+    //         NSLog(@"ios6 - cannot set input gain");
+    //     }
 
 RCT_EXPORT_METHOD(start:(NSString *)mediaType
                    auto:(BOOL)_auto
@@ -315,21 +320,8 @@ RCT_EXPORT_METHOD(setForceSpeakerphoneOn:(int)flag)
 
 RCT_EXPORT_METHOD(setMicrophoneMute:(BOOL)enable)
 {
-    //  self.audioDevice.block = ^() {
-    //         kDefaultAVAudioSessionConfigurationBlock();
-
-    //         AVAudioSession *session = [AVAudioSession sharedInstance];
-
-    //         NSError *error = nil;
-    //         if (![session setCategory:AVAudioSessionCategoryRecord
-    //                       withOptions:AVAudioSessionCategoryOptionAllowBluetooth
-    //                             error:&error]) {
-    //             NSLog(@"AVAudioSession setCategory:withOptions %@",error);
-    //         }
-    //     };
-    //     self.audioDevice.block();
-    if (enable) {
-        [self setInputGain:0.0];
+    if (enable = true) {
+        [self setInputGain:0.1];
     } else {
         [self setInputGain:1.0];
     }
